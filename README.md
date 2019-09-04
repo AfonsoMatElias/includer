@@ -84,7 +84,7 @@
 </h3>
 
 <p align="center" style="font-size:11pt; margin:0;"> 
-    Thanks a lot for visiting easy.js repo 🙂, I hope you enjoyed!! 👌<br/>
+    Thanks a lot for visiting includer.js repo 🙂, I hope you enjoyed!! 👌<br/>
     <h4 align="center">Salute 😃</h4> 
 </p>
 <br/>
