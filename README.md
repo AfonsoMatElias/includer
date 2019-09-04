@@ -66,18 +66,8 @@
     Depois de ter sido importado o script pode-se avançar com o código comum.
 </p>
 
-``` HTML
-    <script src="includer.js" render></script>
-
-    <div>
-        <h1>Este é o meu conteúdo principal</h1>
-        <a href="/home.html">Ir para Home Page</a>
-    </div>
-
-    <script>
-        console.log('Olá');
-    </script>
-```
+    Image Illustration
+![Png](assets/ico/eg3.png)
 
 <h3 style="text-align: justify">
     A Ordem de estruturação é muito importante🤞, por causa da ordem de leitura de códigos dos navegadores!
