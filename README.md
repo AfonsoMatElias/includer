@@ -34,7 +34,7 @@
 <hr />
 
 <p style="text-align: justify">
-    Para usar o conceito de <b>MasterPage</b>, basta primeiro criar a estrutura da MasterPage que geralmente é a estrutura base HTML, depois identificar onde o conteúdo principal está disponibilizado, com a tag <b>inc</b> com o <b>this</b> como o conteúdo do <b>src</b>. Não há necessidade de importar o includer.js na Master Page.
+    Para usar o conceito de <b>MasterPage</b>, basta primeiro criar a estrutura da MasterPage que geralmente é a estrutura base HTML, depois identificar onde o conteúdo principal estará disponibilizado, com a tag <b>inc</b> com <b>this</b> como o conteúdo da propriedade <b>src</b>. Não há necessidade de importar o includer.js na Master Page.
 </p>
 
 ``` HTML
@@ -46,11 +46,11 @@
 
 <p style="text-align: justify">
     <h2>☝ Nota muito importante:</h2>
-    Para este caso, o includer executa os scripts definidos na página depois dela estar totalmente carregada, e as funções padrão do javascript como window.onload, document.addEventListener('DOMContentLoaded', ...), etc, <b>NÃO SÃO EXECUTADOS</b>.
+    Para este caso, o includer executa os scripts definidos na página depois dela ser totalmente carregada, e as funções padrão do javascript como window.onload, document.addEventListener('DOMContentLoaded', ...), etc, <b>NÃO SÃO EXECUTADOS</b>.
 </p>
 
 <p style="text-align: justify">
-    Nas páginas que serão renderizadas, acima de tudo deverá ser importado o script do includer.js e definir uma propriedade <b>render</b>, se não for aplicado nenhum valor a ela, por padrão o includer procura pela MasterPage na <b>raiz</b> com o nome <b>_master_.html</b>, mas se a mesma estive rem uma pasta deverá ser atribuido o caminho da MasterPage como valor na propriedade.
+    Nas páginas que serão renderizadas, a primeiro deverá ser importado o script do includer.js e definir uma propriedade <b>render</b>, se não for definido sem nenhum valor a ela, por padrão o includer procurará pela MasterPage na <b>raiz</b> com o nome <b>_master_.html</b>, mas se a mesma estiver em uma pasta deverá ser atribuido o caminho da MasterPage como valor na propriedade.
 </p>
 
 ``` HTML
@@ -63,7 +63,7 @@
 ```
 
 <p style="text-align: justify">
-    Depois de ter sido importado o script estás livre de avançar com o seu código.
+    Depois de ter sido importado o script pode-se avançar com o código comum.
 </p>
 
 ``` HTML
@@ -80,11 +80,11 @@
 ```
 
 <h3 style="text-align: justify">
-    A Ordem de estruturação é muito importante🤞, por causa da ordem de leitura dos navegadores!! 
+    A Ordem de estruturação é muito importante🤞, por causa da ordem de leitura de códigos dos navegadores!
 </h3>
 
 <p align="center" style="font-size:11pt; margin:0;"> 
-    Thanks a lot for visiting includer.js repo 🙂, I hope you enjoyed!! 👌<br/>
+    Thanks a lot for visiting includer.js repo 🙂, I hope you enjoyed!!! 👌<br/>
     <h4 align="center">Salute 😃</h4> 
 </p>
 <br/>
