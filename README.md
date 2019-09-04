@@ -12,7 +12,7 @@
 <p style="text-align: justify">
     <b>Porquê usar? 🤔</b><br/>
     Quando se está criar os aplicações web💻, ou mesmo websites📰, existem secções que geralmente estão em quase todas páginas do website e usando o HTML convencional geralmente deve-se repetir as mesmas em todas as páginas, e quando se precisar alterar alguma coisa nas secções deverá se fazer em todas as páginas que elas existem.<br><br>
-    O includer.js resolve esta situação, com ele o desenvolvedor tem a possibilidade de definir as secções em um só ficheiro e depois importá-lo📌 na página que deseja, tal como funciona funções <b>include e require</b> do <b>Php</b>. E também dá a possibilidade de definir uma <b>MasterPage</b> para todas as páginas, tal como funciona o <b>Asp.Net</b>. E é uma ferramenta fácil de usar.
+    O includer.js resolve esta situação, com ele o desenvolvedor tem a possibilidade de definir as secções em um só ficheiro e depois importá-lo📌 na página que deseja, tal como funciona funções <b>include e require</b> do <b>Php</b>. E também dá a possibilidade de definir uma <b>MasterPage</b> para todas as páginas, tal como funciona o <b>Asp.Net</b>. E é uma ferramenta fácil de usar😎.
 </p>
 
 <p style="text-align: justify">
