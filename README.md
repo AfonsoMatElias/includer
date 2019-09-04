@@ -24,7 +24,7 @@
 ```
 <p style="text-align: justify">
     <h2>☝ Notas muito importante:</h2>
-    * Não é deve ser definido o a extensão do ficheiro a ser Importado. <br/>❌ Ex.: src="header.html" ; ✔ src="header"<br/> 
+    * Não é deve ser definido a extensão do ficheiro a ser Importado. <br/>❌ Ex.: src="header.html" ; ✔ src="header"<br/> 
     * O includer oferece-se uma função que é executada depois da página ser totalmente carregada, que é: <b>docLoaded(){ ... }</b>, as funções padrão do javascript como window.onload, document.addEventListener('DOMContentLoaded', ...), etc, <b>NÃO SÃO EXECUTADOS</b>.
 </p>
 
