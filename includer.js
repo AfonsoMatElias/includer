@@ -185,9 +185,16 @@ const inc = {
                 // Looping the added nodes
                 for (let n of e.addedNodes)
                     // Checking if the current element is the in one
-                    if (n.nodeName.toLowerCase() == 'inc')
+                    if (n.nodeName.toLowerCase() == 'inc'){
                         // Calling the inc function
                         inc.include(`${n.getAttribute('src')}.html`, n);
+                    }else{
+                        // Getting all the inc elements inside of the element
+                        for(let incElem of n.querySelectorAll('inc'))
+                            // Calling the inc function for each one of them
+                            inc.include(`${incElem.getAttribute('src')}.html`, incElem);
+
+                    }
             })
         })
         // Observing the DOM
