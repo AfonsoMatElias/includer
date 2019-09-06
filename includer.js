@@ -7,9 +7,9 @@ const inc = {
     mainIncluder: async function (path, cb) {
         // fetch function to get the file
         await fetch(path, {
-                // including the content
+                // setting the method
                 method: 'get',
-                // the default content type
+                // the default header content type
                 headers: {
                     'Content-Type': 'text/plain'
                 }
