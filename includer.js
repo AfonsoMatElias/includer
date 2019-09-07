@@ -73,7 +73,7 @@ const inc = {
      * Html master page handler
      * @param {string} path - the master page filepath
      */
-    render: async function (path, main) {
+    render: async function (path, main, title) {
         // Defining the main master page if it's not defined
         path = path ? path + '.html' : path || '_master_.html';
         // Calling the main includer function
@@ -86,6 +86,22 @@ const inc = {
             let incs = document.querySelectorAll('inc');
             // Checking if the master element was found
             if (incs.length) {
+                // Checking if the title was defined
+                if(title){
+                    // getting the head section
+                    let head = document.head;
+                    // Getting the title
+                    let ttle = head.querySelector('title');
+                    // Checking if it's defined
+                    if(ttle)
+                        // Setting the content
+                        ttle.innerHTML = title;
+                    // Otherwise
+                    else
+                        // Creating the title element 
+                        head.innerHTML += `<title>${title}</title>`;
+                }
+                
                 // Inserting the old content and running the other incd
                 for (const incElem of incs) {
                     // Getting the inc value
@@ -217,7 +233,7 @@ const inc = {
             window.stop();
             (async function () {
                 // Calling the render function
-                await inc.render(_script_.getAttribute('render'), window.location.pathname);        
+                await inc.render(_script_.getAttribute('render'), window.location.pathname, _script_.getAttribute('title'));        
                 
                 // Calling the DOM observer
                 inc.observe();

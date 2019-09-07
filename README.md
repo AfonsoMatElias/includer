@@ -50,15 +50,15 @@
 </p>
 
 <p style="text-align: justify">
-    For pages that will be rendered, the first one should be imported the includer.js script and set a <b>render</b> property, if it is set without value to it, by default includer will look for MasterPage in the <b>root</b> with the name <b>_master_.html</b>, but if it is into a folder, the MasterPage path must be assigned as the property value.
+    For pages that will be rendered, the first one should be imported the includer.js script and set a <b>render</b> property, if it is set without value to it, by default includer will look for MasterPage in the <b>root</b> with the name <b>_master_.html</b>, but if it is into a folder, the MasterPage path must be assigned as the property value. To set the page title just set a title attribute with the desired value in the current script.
 </p>
 
 ``` HTML
     <!-- In case where MasterPage is in the root and has the name _master_.html -->
-    <script src="includer.js" render></script>
+    <script src="includer.js" render title="Main Page"></script>
 
     <!-- In case MasterPage is in a folder -->
-    <script src="includer.js" render="shared/_master_"></script>
+    <script src="includer.js" render="shared/_master_" title="Home Page"></script>
 ```
 
 <p style="text-align: justify">

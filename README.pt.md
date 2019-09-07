@@ -50,16 +50,16 @@
 </p>
 
 <p style="text-align: justify">
-    Para páginas que serão renderizadas, a primeiro deverá ser importado o script do includer.js e definir uma propriedade <b>render</b>, se for definido sem valor a ela, por padrão o includer procurará pela MasterPage na <b>raiz</b> com o nome <b>_master_.html</b>, mas se a mesma estiver em uma pasta deverá ser atribuido o caminho da MasterPage como valor da propriedade.
+    Para páginas que serão renderizadas, a primeiro deverá ser importado o script do includer.js e definir uma propriedade <b>render</b>, se for definido sem valor a ela, por padrão o includer procurará pela MasterPage na <b>raiz</b> com o nome <b>_master_.html</b>, mas se a mesma estiver em uma pasta deverá ser atribuido o caminho da MasterPage como valor da propriedade. Para definir do titulo da página basta definir um atributo <b>title</b> com o valor desejado no script corrente.
 </p>
 
 ``` HTML
     <!-- Para o caso em que a MasterPage estiver na raiz e 
     tiver o nome _master_.html -->
-    <script src="includer.js" render></script>
+    <script src="includer.js" render title="Página Principal"></script>
 
     <!-- Para o caso em que a MasterPage estiver em uma pasta -->
-    <script src="includer.js" render="shared/_master_"></script>
+    <script src="includer.js" render="shared/_master_" title="Página Inicial"></script>
 ```
 
 <p style="text-align: justify">
