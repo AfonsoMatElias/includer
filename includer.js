@@ -101,7 +101,6 @@ const inc = {
                         // Creating the title element 
                         head.innerHTML += `<title>${title}</title>`;
                 }
-                
                 // Inserting the old content and running the other incd
                 for (const incElem of incs) {
                     // Getting the inc value
