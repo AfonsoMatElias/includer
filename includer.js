@@ -87,20 +87,9 @@ const inc = {
             // Checking if the master element was found
             if (incs.length) {
                 // Checking if the title was defined
-                if(title){
-                    // getting the head section
-                    let head = document.head;
-                    // Getting the title
-                    let ttle = head.querySelector('title');
-                    // Checking if it's defined
-                    if(ttle)
-                        // Setting the content
-                        ttle.innerHTML = title;
-                    // Otherwise
-                    else
-                        // Creating the title element 
-                        head.innerHTML += `<title>${title}</title>`;
-                }
+                if(title)
+                    // Setting the page title
+                    document.title = title;
                 // Inserting the old content and running the other incd
                 for (const incElem of incs) {
                     // Getting the inc value
@@ -224,7 +213,7 @@ const inc = {
     /**
      * Includer initializer function
      */
-    init: function name() {
+    init: function () {
         let _script_ = document.currentScript;
         // Checking if a render script was found
         if (_script_ && _script_.hasAttribute('render')) {
