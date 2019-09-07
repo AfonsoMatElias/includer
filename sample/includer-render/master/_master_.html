@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        
+        <title>Test</title>
+        <meta charset="utf-8" />
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                font-family: 'Lucida Sans',
+                    'Lucida Sans Regular', 
+                    'Lucida Grande', 
+                    'Lucida Sans Unicode', 
+                    Geneva, 
+                    Verdana, sans-serif;
+            }
+
+            .content {
+                width: -webkit-fill-available;
+                height: -webkit-fill-available;
+            }
+
+            .fixed {
+                right: 0;
+                left: 0;
+            }
+
+            .fill {
+                background-color: #eee;
+                min-height: 100px;
+                display: flex;
+            }
+
+            .fill:first-of-type {
+                margin-bottom: 10px;
+            }
+
+            .fill:last-of-type {
+                margin-top: 10px;
+                bottom: 0;
+            }
+
+            .main {
+                min-height: 650px;
+                background-color: #bbb;
+            }
+
+            .middle{
+                /* Only work if the parent has display:flex; property */
+                margin: auto;
+            }
+        </style>
+
+    </head>
+
+    <body>
+
+        <div class="content">
+            
+            <div  class="fill header" src="inc/header">
+                <h1 class="middle">
+                    Header
+                </h1>
+            </div>
+            
+            <div  class="fill main">
+                <h1 class="middle">
+                    <inc src="this"></inc>
+                </h1>
+            </div>
+
+            <div class="fill footer" src="inc/footer">
+                <h4 class="middle">
+                    Copyright @ Afonso Matumona
+                </h4>
+            </div>
+
+        </div>
+
+    </body>
+
+</html>

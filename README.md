@@ -5,27 +5,27 @@
 <h2 align="center"> includer.js </h2>
 
 <p style="text-align: justify">
-    Includer.js é uma ferramenta🔨 javascript para auxiliar na criação de website ou aplicações web, ela possibilita incluir partes HTML📃, como: <b>Header, Footer, Modals, etc</b>, ou mesmo criar uma página-mãe (<b>MasterPage</b>), e em todas outras páginas definir simplesmente o que deve ser renderizado.
-    Há dois jeitos de usar o includer.js, como já foi dito no texto acima, <b>1º</b> usando simplesmente o <b>inc</b>, ou <b>2º</b> usando o tag inc de renderização.
+    Includer.js is a javascript tool🔨 to assist in the creation of websites or web applications, it makes it possible to include HTML📃 parts, such as: <b>Header, Footer, Modals, etc</b>, or even create a <b>MasterPage</b>, and on the others pages simply define what should be rendered. There are two ways to use includer.js, as stated in the text above, <b>1st</b> simply using inc, or <b>2nd</b> using the rendering inc tag.
+
 </p>
 
 <p style="text-align: justify">
-    <b>Porquê usar? 🤔</b><br/>
-    Quando se está criar os aplicações web💻, ou mesmo websites📰, existem secções que geralmente estão em quase todas páginas do website e usando o HTML convencional geralmente deve-se repetir as mesmas em todas as páginas, e quando se precisar alterar alguma coisa nas secções deverá se fazer em todas as páginas que elas existem.<br><br>
-    O includer.js resolve esta situação, com ele o desenvolvedor terá a possibilidade de definir a secção em um só ficheiro e depois importá-lo📌 na página que deseja, tal como funciona as funções <b>include</b> e <b>require</b> do <b>Php</b>. Ele também dá a possibilidade de definir uma <b>MasterPage</b> para todas as páginas, tal como funciona o <b>Asp.Net</b>. E é uma ferramenta fácil de usar😎.
+    <b>Why use? 🤔</b><br/>
+    When you are creating web applications💻, or even websites📰, there are sections that are usually on almost every page of the website and using conventional HTML you should usually repeat them on every page, and when you need to change something in sections should be done on every page they exist.<br><br>
+    Includer.js solves this situation, with it the developer will be able to define the section in a single file and then import📌 it into the page they want, just as <b>Php's include and require</b> functions work. It also gives you the ability to set a <b>MasterPage</b> for all pages as <b>Asp.Net</b> works. And it's an easy tool to use😎.
 </p>
 
 <p style="text-align: justify">
-    Para usar o <b>include</b> simples, basta importar o script na página que se deseja incluir, escolher o local de preferência e definí-lo com base a sintaxe:
+    To use simple <b>include</b>, simply import the script into the page you want to include, choose the preferred location, and set it based on syntax:
 </p>
 
 ``` HTML
-    <inc src="[caminho do ficheiro]"></inc>
+    <inc src="[filepath]"></inc>
 ```
 <p style="text-align: justify">
-    <h2>☝ Notas muito importante:</h2>
-    * Não é deve ser definido a extensão do ficheiro a ser Importado. <br/>❌ Ex.: src="header.html" ; ✔ src="header"<br/> 
-    * O includer oferece-se uma função que é executada depois da página ser totalmente carregada, que é: <b>inc.loaded(function (e) { ... })</b>, que nem as funções padrão do javascript <b>window.onload, document.addEventListener('DOMContentLoaded', ...)</b>, etc, mas estas funções não podem ser executadas porque <b>ELAS NÃO SÃO EXECUTADAS</b>.
+    <h2>☝ Very important notes:</h2>
+    * The file extension to be included must not be defined. <br/>❌ Eg.: src="header.html" ; ✔ src="header"<br/> 
+    * Includer offers a function that executes after the page is fully loaded, which is: <b>inc.loaded (function (e) {...})</b>, like the standard javascript functions <b>window.onload, document.addEventListener ( 'DOMContentLoaded', ...), etc</b>, but these functions cannot be used because <b>THEY ARE NOT EXECUTED</b>.
 </p>
 
     Image Illustration
@@ -34,7 +34,7 @@
 <hr />
 
 <p style="text-align: justify">
-    Para usar o <b>include render</b>(que tem conceito de <b>MasterPage</b>), basta primeiro criar a estrutura da MasterPage que geralmente é a estrutura base HTML, depois identificar onde o conteúdo principal estará disponibilizado, com a tag <b>inc</b> com <b>this</b> como o conteúdo da propriedade <b>src</b>. Não há necessidade de importar o includer.js na Master Page.
+    To use <b>include render</b> (which has the concept of <b>MasterPage</b>), simply create the MasterPage structure which is usually the base HTML structure, then identify where the main content will be made available, with the <b>inc</b> tag with <b>this</b> as the <b>src</b> property content. There is no need to import includer.js into the MasterPage.
 </p>
 
 ``` HTML
@@ -45,37 +45,36 @@
 ![Png](assets/ico/eg2.png)
 
 <p style="text-align: justify">
-    <h2>☝ Nota muito importante:</h2>
-    Para este caso, o includer executa os scripts definidos na página depois dela ser totalmente carregada, e as funções padrão do javascript como <b>window.onload, document.addEventListener('DOMContentLoaded', ...)</b>, etc, <b>TAMBÉM NÃO SÃO EXECUTADAS</b>, mas a função do includer <b>inc.loaded(function (e) { ... })</b> é executada (ela pode ser usada como não, mas aconselhamos usá-la).<br>
+    <h2>☝ Very importante note:</h2>
+    In this case, includer runs the scripts defined on the page after it is fully loaded, and the standard javascript functions like <b>window.onload, document.addEventListener ('DOMContentLoaded', ...), etc</b>, <b>ARE NOT EXECUTED</b>, but includer <b>inc.loaded(function (e) {...})</b> function is executed (it can be used as non, but we advise using it).
 </p>
 
 <p style="text-align: justify">
-    Nas páginas que serão renderizadas, a primeiro deverá ser importado o script do includer.js e definir uma propriedade <b>render</b>, se não for definido sem nenhum valor a ela, por padrão o includer procurará pela MasterPage na <b>raiz</b> com o nome <b>_master_.html</b>, mas se a mesma estiver em uma pasta deverá ser atribuido o caminho da MasterPage como valor na propriedade.
+    For pages that will be rendered, the first one should be imported the includer.js script and set a <b>render</b> property, if it is set without value to it, by default includer will look for MasterPage in the <b>root</b> with the name <b>_master_.html</b>, but if it is into a folder, the MasterPage path must be assigned as the property value.
 </p>
 
 ``` HTML
-    <!-- Para o caso em que a MasterPage estiver na raiz e 
-    tiver o nome _master_.html -->
+    <!-- In case where MasterPage is in the root and has the name _master_.html -->
     <script src="includer.js" render></script>
 
-    <!-- Para o caso em que a MasterPage estiver em uma pasta -->
+    <!-- In case MasterPage is in a folder -->
     <script src="includer.js" render="shared/_master_"></script>
 ```
 
 <p style="text-align: justify">
-    Depois de ter sido importado o script pode-se avançar com o código comum.
+    Once you have imported the script you can proceed with the common code.
 </p>
 
     Image Illustration
 ![Png](assets/ico/eg3.png)
 
 <p style="text-align: justify">
-    * Quando se estiver a usar o includer simples, o argumento da função que é passada pelo inc.loaded((<span style="color:red">e</span>) => { ... }), é o event <b>DOMContentLoaded</b>.<br>
-    * Quando se estiver a usar o include render, , o argumento da função que é passada pelo inc.loaded((<span style="color:red">e</span>) => { ... }), é o elemento <b>document</b>.
+    * When using the simple includer, the argument of the function that is passed by inc.loaded((<span style="color:red">e</span>) => { ... }), is the <b>DOMContentLoaded</b> event.<br>
+    * When using include render, the argument of the function that is passed by inc.loaded((<span style="color:red">e</span>) => { ... }), is the <b>document</b> element.
 </p>
 
 <h3 style="text-align: justify">
-    A Ordem de estruturação é muito importante🤞, por causa da ordem de leitura de códigos dos navegadores!
+    Structuring Order is very important🤞, because of the browser's code reading order!
 </h3>
 
 <p align="center" style="font-size:11pt; margin:0;"> 
