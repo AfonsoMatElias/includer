@@ -70,7 +70,7 @@
 ![Png](assets/ico/eg3.png)
 
 <p style="text-align: justify">
-    * Quando se estiver a usar o includer simples, o argumento da função que é passada pelo inc.loaded((<span style="color:red">e</span>) => { ... }), é o event <b>DOMContentLoaded</b>.<br>
+    * Quando se estiver a usar o includer simples, o argumento da função que é passada pelo inc.loaded((<span style="color:red">e</span>) => { ... }), é o evento <b>DOMContentLoaded</b>.<br>
     * Quando se estiver a usar o include render, , o argumento da função que é passada pelo inc.loaded((<span style="color:red">e</span>) => { ... }), é o elemento <b>document</b>.
 </p>
 
