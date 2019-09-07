@@ -84,5 +84,5 @@
 <br/>
 
 <p align="center" style="font-size:11pt; margin:0;"> 
-    © 2019, Afonso Matumona Elias 
+    © 2019, Afonso Matumona Elias | <b>Translated by Google Translator</b>
 </p>
