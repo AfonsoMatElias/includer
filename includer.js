@@ -6,26 +6,22 @@ const inc = {
      */
     mainIncluder: async function (path, cb) {
         // fetch function to get the file
-        await fetch(path, {
-                // setting the method
-                method: 'get',
-                // the default header content type
-                headers: {
-                    'Content-Type': 'text/plain'
-                }
-            })
-            // Dealing with returned data
-            .then(async result => {
-                // Checking if the response is ok
-                if (result.ok)
-                    // Calling the callback
-                    cb(await result.text());
-                else
-                    // Printing the error on the execution
-                    console.error(`Something went wrong. Description: ${ result.statusText }`);
-            })
-            // Catching and printing the error
-            .catch(async x => console.error(`Something went wrong. Description: ${ await result.text() }`));
+        let result = await fetch(path, {
+            // setting the method
+            method: 'get',
+            // the default header content type
+            headers: {
+                'Content-Type': 'text/plain'
+            }
+        });
+
+        // Checking if the response is ok
+        if (result.ok)
+            // Calling the callback
+            cb(await result.text());
+        else
+            // Printing the error on the execution
+            console.error(`Something went wrong. Description: ${ result.statusText }`);
     },
 
     /**
@@ -87,7 +83,7 @@ const inc = {
             // Checking if the master element was found
             if (incs.length) {
                 // Checking if the title was defined
-                if(title)
+                if (title)
                     // Setting the page title
                     document.title = title;
                 // Inserting the old content and running the other incd
@@ -98,9 +94,26 @@ const inc = {
                     if (v == 'this') {
                         // Adding the main section
                         await inc.mainIncluder(main, function (res) {
-                            incElem.innerHTML += res;
+                            // Setting the main content
+                            incElem.innerHTML = res;
+
+                            // Watching the link elements
+                            inc.watchLinks({
+                                // Setting the action that will be fired
+                                action: async function (href, ttle) {
+                                    // Calling the main includer function
+                                    await inc.mainIncluder(href, function (html) {
+                                        // Setting the content
+                                        incElem.innerHTML = html;
+                                        // Updating the url
+                                        window.history.pushState(html, ttle, href);
+                                    });
+                                }
+                            });
+
+                            // Stop the observer for a while
+                            inc.watch = false;
                         });
-                        // Pushing all the script already evaluted
                     }
                     // Otherwise  
                     else
@@ -117,7 +130,7 @@ const inc = {
                 inc.events.forEach(function (cb) {
                     cb(document);
                 });
-                
+
             } else {
                 // Printing the error message
                 console.error(`Something went wrong. Description: 'inc' tag not found.`);
@@ -184,30 +197,111 @@ const inc = {
     observe: function () {
         // Observing any change that can be made in the DOM
         new MutationObserver(function (mutation) {
-            // Looping the mutations
-            mutation.forEach(function (e) {
-                // Looping the added nodes
-                for (let n of e.addedNodes)
-                    // Checking if the current element is the in one
-                    if (n.nodeName.toLowerCase() == 'inc'){
-                        // Calling the inc function
-                        inc.include(`${n.getAttribute('src')}.html`, n);
-                    }else{
-                        // Getting all the inc elements inside of the element
-                        for(let incElem of n.querySelectorAll('inc'))
-                            // Calling the inc function for each one of them
-                            inc.include(`${incElem.getAttribute('src')}.html`, incElem);
+                // Looping the mutations
+                mutation.forEach(async function (e) {
+                    // Looping the added nodes
+                    for (let n of e.addedNodes)
+                        // Checking if the current element is the in one
+                        if (n.nodeName.toLowerCase() == 'inc') {
+                            // Calling the inc function
+                            inc.include(`${n.getAttribute('src')}.html`, n);
+                        } 
+                        // Otherwise
+                        else {
+                            try {
+                                // Getting all the inc elements inside of the element
+                                for (let incElem of n.querySelectorAll('inc'))
+                                    // Calling the inc function for each one of them
+                                    await inc.include(`${incElem.getAttribute('src')}.html`, incElem);
 
-                    }
+                                let links = [];
+                                // Checking if the current element is an anchor and has the reload property
+                                if (n.localName == 'a' && n.hasAttribute('reload'))
+                                    // Setting a list of this element
+                                    links = [n];
+                                // Otherwise
+                                else
+                                    // Getting all the anchors with reload value
+                                    links = n.querySelectorAll('a[reload]');
+
+                                if (inc.watch) {
+                                    // Watching the link elements
+                                    inc.watchLinks({
+                                        // Getting the links
+                                        links: links,
+                                        // Setting the action that will be fired
+                                        action: async function (href, ttle) {
+                                            // Calling the main includer function
+                                            await inc.mainIncluder(href, function (html) {
+                                                // Getting the inc element
+                                                let incElem = document.querySelector('inc[src="this"]');
+                                                if (incElem) {
+                                                    // Setting the content
+                                                    incElem.innerHTML = html;
+                                                    // Updating the url
+                                                    window.history.pushState(html, ttle, href);
+                                                } else {
+                                                    console.error(`Error: <inc src="this"></inc> not found, please check define it.`);
+                                                }
+
+                                            });
+                                        }
+                                    });
+                                }
+
+                            } catch {}
+                        }
+                    // Setting watch to true
+                    if (!inc.watch) inc.watch = true;
+                });
             })
-        })
-        // Observing the DOM
-        .observe(document, {
-            // Listening the childs
-            childList: true,
-            // Listening the childs of the main child
-            subtree: true
-        });
+            // Observing the DOM
+            .observe(document, {
+                // Listening the childs
+                childList: true,
+                // Listening the childs of the main child
+                subtree: true
+            });
+    },
+
+    // An helper variable to check if the observer can be executed
+    // true : watch
+    // false : don't watch
+    watch: true,
+
+    /**
+     * Link watcher for reload type page
+     * @param {Object} v - Watch links object setup   
+     */
+    watchLinks: function (v) {
+        let elem = [];
+        // Getting the links
+        elem = v.links == null ? document.querySelectorAll('a[reload]') : v.links;
+        // Looping them
+        for (let a of elem) {
+            // Adding the event listener
+            a.addEventListener('click', async function (ev) {
+                // Getting the href attr value
+                let href = ev.target.getAttribute('href');
+                // Checking if it got a valid value
+                if (href != null && href != 'null' && href != '#') {
+                    // Preventing the default action
+                    ev.preventDefault();
+                    // Calling the action that will be fired
+                    await v.action(href, ev.target.getAttribute('pTitle') || href);
+                    // Setting the page title 
+                    document.title = ev.target.getAttribute('pTitle') || href;
+                    // Geeting the main inc
+                    let _inc_ = document.querySelector('inc[src="this"]');
+                    // Checking if it's valid
+                    if (_inc_)
+                        // Looping the scripts
+                        for (let s of _inc_.querySelectorAll('script'))
+                            // Evaluating the scripts
+                            eval(s.innerHTML);
+                }
+            });
+        }
     },
 
     /**
@@ -221,14 +315,11 @@ const inc = {
             window.stop();
             (async function () {
                 // Calling the render function
-                await inc.render(_script_.getAttribute('render'), window.location.pathname, _script_.getAttribute('title'));        
-                
+                await inc.render(_script_.getAttribute('render'), window.location.pathname, _script_.getAttribute('title'));
                 // Calling the DOM observer
                 inc.observe();
             })();
-
-        }else{
-
+        } else {
             // Listening the main document event 
             document.addEventListener('DOMContentLoaded', async function (e) {
                 // Finding all the includes tags
@@ -246,7 +337,7 @@ const inc = {
                     cb(e);
                 });
             });
-        }       
+        }
     }
 }
 
