@@ -4,7 +4,7 @@ const inc = {
      * @param {string} path - the filepath that needs to be included 
      * @param {Function} cb - the function that needs to be called alfer the true response.
      */
-    mainIncluder: async function (path, cb) {
+    async mainIncluder(path, cb) {
         // fetch function to get the file
         let result = await fetch(path, {
             // setting the method
@@ -16,12 +16,13 @@ const inc = {
         });
 
         // Checking if the response is ok
-        if (result.ok)
+        if (result.ok) {
             // Calling the callback
             cb(await result.text());
-        else
+        } else {
             // Printing the error on the execution
-            console.error(`Something went wrong. Description: ${ result.statusText }`);
+            console.error(`Something went wrong. \nFile: ${path}. \nDescription: ${ result.statusText }`);
+        }
     },
 
     /**
@@ -29,7 +30,7 @@ const inc = {
      * @param {string} path - the filepath of the element that will be included. 
      * @param {HTMLElement} inc - the inc element that the content will be included. 
      */
-    include: async function (path, elem) {
+    async include(path, elem) {
         // Checking if the 1st arg is null 
         if (path == 'null.html') {
             // Printing the error messagr
@@ -39,6 +40,13 @@ const inc = {
         }
         // Verifying if the include needs to be ignored
         if (path == 'inc.html') return;
+
+        if (path == 'this.html') {
+            path = elem.getAttribute('default');
+            if (!path) return;
+            path += '.html';
+        }
+
         // Calling the main includer function
         await inc.mainIncluder(path, function (result) {
             // Adding the content
@@ -69,50 +77,33 @@ const inc = {
      * Html master page handler
      * @param {string} path - the master page filepath
      */
-    render: async function (path, main, title) {
+    async render(path, main, title) {
         // Defining the main master page if it's not defined
         path = path ? path + '.html' : path || '_master_.html';
         // Calling the main includer function
         await inc.mainIncluder(path, async function (result) {
             // Getting the main document
-            let elem = document.documentElement;
+            let elem = inc.d.documentElement;
             // Filling the document with the master content value
             elem.innerHTML = result;
             // Selecting the inc defined in the master
-            let incs = document.querySelectorAll('inc');
+            let incs = inc.allIncs(inc.d);
             // Checking if the master element was found
             if (incs.length) {
                 // Checking if the title was defined
                 if (title)
                     // Setting the page title
-                    document.title = title;
+                    inc.d.title = title;
                 // Inserting the old content and running the other incd
                 for (const incElem of incs) {
                     // Getting the inc value
-                    let v = incElem.getAttribute('src');
+                    let v = inc.src(incElem);
                     // Checking if the is the main container
                     if (v == 'this') {
                         // Adding the main section
                         await inc.mainIncluder(main, function (res) {
                             // Setting the main content
                             incElem.innerHTML = res;
-
-                            // Watching the link elements
-                            inc.watchLinks({
-                                // Setting the action that will be fired
-                                action: async function (href, ttle) {
-                                    // Calling the main includer function
-                                    await inc.mainIncluder(href, function (html) {
-                                        // Setting the content
-                                        incElem.innerHTML = html;
-                                        // Updating the url
-                                        window.history.pushState(html, ttle, href);
-                                    });
-                                }
-                            });
-
-                            // Stop the observer for a while
-                            inc.watch = false;
                         });
                     }
                     // Otherwise  
@@ -128,26 +119,200 @@ const inc = {
 
                 // Calling all the loaded events
                 inc.events.forEach(function (cb) {
-                    cb(document);
+                    cb(inc.d);
                 });
 
             } else {
                 // Printing the error message
-                console.error(`Something went wrong. Description: 'inc' tag not found.`);
+                console.error(`Something went wrong. Description: 'inc' tag or inc-src attribute not found.`);
             }
         });
     },
-
-    // list of events to be fired up
-    events: [],
 
     /**
      * Add the functions to be called when the page is fully loaded
      * @param {*} cb - the callback function 
      */
-    loaded: function (cb) {
+    loaded(cb) {
+        // Adding the event that needs to be fired
         inc.events.push(cb);
     },
+
+    /**
+     * Function to observe the DOM
+     */
+    observe() {
+        // Observing any change that can be made in the DOM
+        new MutationObserver(function (mutation) {
+                // Looping the mutations
+                mutation.forEach(async function (e) {
+                    // Looping the added nodes
+                    for (let n of e.addedNodes)
+                        // Checking if the current element is the in one
+                        if (n.nodeName.toLowerCase() == 'inc' || (typeof n.hasAttribute != 'undefined' && n.hasAttribute('inc-src'))) {
+                            // Calling the inc function
+                            inc.include(`${inc.src(n)}.html`, n);
+                        }
+                    // Otherwise
+                    else {
+                        try {
+                            // Getting all the inc elements inside of the element
+                            let incs = inc.allIncs(n);
+                            // Looping them
+                            for (let incElem of incs)
+                                // Calling the inc function for each one of them
+                                await inc.include(`${inc.src(incElem)}.html`, incElem);
+
+                            let links = [];
+                            // Checking if the current element is an anchor and has the reload property
+                            if (n.localName == 'a' && n.hasAttribute('reload'))
+                                // Setting a list of this element
+                                links = [n];
+                            // Otherwise
+                            else
+                                // Getting all the anchors with reload value
+                                links = n.querySelectorAll('a[reload]');
+
+                            // Watching the link elements
+                            inc.watchLinks({
+                                // Getting the links
+                                links: links,
+                                // Setting the action that will be fired
+                                action: async function (href, ttle) {
+                                    // Calling the main includer function
+                                    await inc.mainIncluder(href, function (html) {
+                                        // Getting the inc element
+                                        let incElem = inc.d.querySelector('inc[src="this"]') || inc.d.querySelector('[inc-src="this"]');
+                                        if (incElem) {
+                                            // Setting the content
+                                            incElem.innerHTML = html;
+                                            // Updating the url
+                                            window.history.pushState(html, ttle, href);
+                                        } else {
+                                            console.error(`Error: <inc src="this"></inc> not found, please check define it.`);
+                                        }
+
+                                    });
+                                }
+                            });
+
+                        } catch {}
+                    }
+                    // Setting watch to true
+                    if (!inc.watch) inc.watch = true;
+                });
+            })
+            // Observing the DOM
+            .observe(inc.d, {
+                // Listening the childs
+                childList: true,
+                // Listening the childs of the main child
+                subtree: true
+            });
+    },
+
+    /**
+     * Link watcher for reload type page
+     * @param {Object} v - Watch links object setup   
+     */
+    watchLinks(v) {
+        let elem = [];
+        // Getting the links
+        elem = v.links == null ? inc.d.querySelectorAll('a[reload]') : v.links;
+        // Looping them
+        for (let a of elem) {
+            // Adding the event listener
+            a.addEventListener('click', async function (ev) {
+                // Getting the href attr value
+                let href = ev.target.getAttribute('href');
+                // Checking if it got a valid value
+                if (href != null && href != 'null' && href != '#') {
+                    // Preventing the default action
+                    ev.preventDefault();
+                    // Calling the action that will be fired
+                    await v.action(href, ev.target.getAttribute('pTitle') || href);
+                    // Setting the page title 
+                    inc.d.title = ev.target.getAttribute('pTitle') || href;
+                    // Geeting the main inc
+                    let _inc_ = inc.d.querySelector('inc[src="this"]') || inc.d.querySelector('[inc-src="this"]');
+                    // Checking if it's valid
+                    if (_inc_)
+                        // Looping the scripts
+                        for (let s of _inc_.querySelectorAll('script'))
+                            // Evaluating the scripts
+                            eval(s.innerHTML);
+                }
+            });
+        }
+    },
+
+    /**
+     * Includer initializer function
+     */
+    init() {
+        let _script_ = inc.d.currentScript;
+        // Checking if a render script was found
+        if (_script_ && _script_.hasAttribute('render')) {
+            // Stoping the loading process
+            window.stop();
+            (async function () {
+                // Calling the render function
+                await inc.render(_script_.getAttribute('render'), window.location.pathname, _script_.getAttribute('title'));
+                // Calling the DOM observer
+                inc.observe();
+            })();
+        } else {
+            // Listening the main document event 
+            inc.d.addEventListener('DOMContentLoaded', async function (e) {
+                // Calling the DOM observer
+                inc.observe();
+                // Finding all the includes tags
+                let incs = inc.allIncs(inc.d);
+                // Looping them
+                for (let elem of incs)
+                    // including them
+                    await inc.include(`${inc.src(elem)}.html`, elem);
+
+                // Calling all the loaded events
+                inc.events.forEach(function (cb) {
+                    cb(e);
+                });
+            });
+        }
+    },
+
+    // Auxiliary variables and functions
+    
+    /**
+     * Helper to get the source value a inc value 
+     * @param {INCElement} elem - the inc element
+     */
+    src(elem) {
+        // getting the value of the attribube src ou inc-src
+        return elem.getAttribute('src') || elem.getAttribute('inc-src');
+    },
+
+    /**
+     * Helper to get all the include element into an element
+     * @param {HTMLElement} source 
+     */
+    allIncs(source){
+        // Aux inc list
+        let incs = [];
+        // Getting all inc tags
+        incs.push.apply(incs, [].slice.call(source.querySelectorAll('inc')));
+        // Getting all inc source attributes and looping them
+        for (const e of [].slice.call(source.querySelectorAll('[inc-src]')))
+            // Checking if it's doesn't exist
+            if(!incs.includes(e))
+                // Adding it to the array
+                incs.push(e);
+        // Returning every elements added
+        return incs;
+    },
+
+    // list of events to be fired up
+    events: [],
 
     // Model Properties handler
     modelHandler: {
@@ -191,154 +356,8 @@ const inc = {
         }
     },
 
-    /**
-     * Function to observe the DOM
-     */
-    observe: function () {
-        // Observing any change that can be made in the DOM
-        new MutationObserver(function (mutation) {
-                // Looping the mutations
-                mutation.forEach(async function (e) {
-                    // Looping the added nodes
-                    for (let n of e.addedNodes)
-                        // Checking if the current element is the in one
-                        if (n.nodeName.toLowerCase() == 'inc') {
-                            // Calling the inc function
-                            inc.include(`${n.getAttribute('src')}.html`, n);
-                        } 
-                        // Otherwise
-                        else {
-                            try {
-                                // Getting all the inc elements inside of the element
-                                for (let incElem of n.querySelectorAll('inc'))
-                                    // Calling the inc function for each one of them
-                                    await inc.include(`${incElem.getAttribute('src')}.html`, incElem);
-
-                                let links = [];
-                                // Checking if the current element is an anchor and has the reload property
-                                if (n.localName == 'a' && n.hasAttribute('reload'))
-                                    // Setting a list of this element
-                                    links = [n];
-                                // Otherwise
-                                else
-                                    // Getting all the anchors with reload value
-                                    links = n.querySelectorAll('a[reload]');
-
-                                if (inc.watch) {
-                                    // Watching the link elements
-                                    inc.watchLinks({
-                                        // Getting the links
-                                        links: links,
-                                        // Setting the action that will be fired
-                                        action: async function (href, ttle) {
-                                            // Calling the main includer function
-                                            await inc.mainIncluder(href, function (html) {
-                                                // Getting the inc element
-                                                let incElem = document.querySelector('inc[src="this"]');
-                                                if (incElem) {
-                                                    // Setting the content
-                                                    incElem.innerHTML = html;
-                                                    // Updating the url
-                                                    window.history.pushState(html, ttle, href);
-                                                } else {
-                                                    console.error(`Error: <inc src="this"></inc> not found, please check define it.`);
-                                                }
-
-                                            });
-                                        }
-                                    });
-                                }
-
-                            } catch {}
-                        }
-                    // Setting watch to true
-                    if (!inc.watch) inc.watch = true;
-                });
-            })
-            // Observing the DOM
-            .observe(document, {
-                // Listening the childs
-                childList: true,
-                // Listening the childs of the main child
-                subtree: true
-            });
-    },
-
-    // An helper variable to check if the observer can be executed
-    // true : watch
-    // false : don't watch
-    watch: true,
-
-    /**
-     * Link watcher for reload type page
-     * @param {Object} v - Watch links object setup   
-     */
-    watchLinks: function (v) {
-        let elem = [];
-        // Getting the links
-        elem = v.links == null ? document.querySelectorAll('a[reload]') : v.links;
-        // Looping them
-        for (let a of elem) {
-            // Adding the event listener
-            a.addEventListener('click', async function (ev) {
-                // Getting the href attr value
-                let href = ev.target.getAttribute('href');
-                // Checking if it got a valid value
-                if (href != null && href != 'null' && href != '#') {
-                    // Preventing the default action
-                    ev.preventDefault();
-                    // Calling the action that will be fired
-                    await v.action(href, ev.target.getAttribute('pTitle') || href);
-                    // Setting the page title 
-                    document.title = ev.target.getAttribute('pTitle') || href;
-                    // Geeting the main inc
-                    let _inc_ = document.querySelector('inc[src="this"]');
-                    // Checking if it's valid
-                    if (_inc_)
-                        // Looping the scripts
-                        for (let s of _inc_.querySelectorAll('script'))
-                            // Evaluating the scripts
-                            eval(s.innerHTML);
-                }
-            });
-        }
-    },
-
-    /**
-     * Includer initializer function
-     */
-    init: function () {
-        let _script_ = document.currentScript;
-        // Checking if a render script was found
-        if (_script_ && _script_.hasAttribute('render')) {
-            // Stoping the loading process
-            window.stop();
-            (async function () {
-                // Calling the render function
-                await inc.render(_script_.getAttribute('render'), window.location.pathname, _script_.getAttribute('title'));
-                // Calling the DOM observer
-                inc.observe();
-            })();
-        } else {
-            // Listening the main document event 
-            document.addEventListener('DOMContentLoaded', async function (e) {
-                // Finding all the includes tags
-                let incs = document.querySelectorAll('inc');
-                // Looping them
-                for (let elem of incs)
-                    // including them
-                    await inc.include(`${elem.getAttribute('src')}.html`, elem);
-
-                // Calling the DOM observer
-                inc.observe();
-
-                // Calling all the loaded events
-                inc.events.forEach(function (cb) {
-                    cb(e);
-                });
-            });
-        }
-    }
+    // Some alias
+    d: document
 }
 
 // Initializing the includer
