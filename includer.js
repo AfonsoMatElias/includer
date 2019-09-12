@@ -116,12 +116,10 @@ const inc = {
                     // Evaluating them
                     eval(s.innerHTML);
                 }
-
                 // Calling all the loaded events
-                inc.events.forEach(function (cb) {
+                for(let cb of inc.loadedEvents) {
                     cb(inc.d);
-                });
-
+                }
             } else {
                 // Printing the error message
                 console.error(`Something went wrong. Description: 'inc' tag or inc-src attribute not found.`);
@@ -135,7 +133,16 @@ const inc = {
      */
     loaded(cb) {
         // Adding the event that needs to be fired
-        inc.events.push(cb);
+        inc.loadedEvents.push(cb);
+    },
+
+    /**
+     * Funciton that will be call after an inc be added, if it's defined
+     * @param {HTMLElement}  - the added element  
+     */
+    added(cb){
+        // Adding the event that needs to be fired
+        inc.addedEvent = cb;
     },
 
     /**
@@ -149,7 +156,8 @@ const inc = {
                     // Looping the added nodes
                     for (let n of e.addedNodes)
                         // Checking if the current element is the in one
-                        if (n.nodeName.toLowerCase() == 'inc' || (typeof n.hasAttribute != 'undefined' && n.hasAttribute('inc-src'))) {
+                        if (n.nodeName.toLowerCase() == 'inc' || 
+                           (typeof n.hasAttribute != 'undefined' && n.hasAttribute('inc-src'))) {
                             // Calling the inc function
                             inc.include(`${inc.src(n)}.html`, n);
                         }
@@ -179,10 +187,11 @@ const inc = {
                                 links: links,
                                 // Setting the action that will be fired
                                 action: async function (href, ttle) {
+                                    // Getting the inc element
+                                    let incElem = inc.d.querySelector('inc[src="this"]') || inc.d.querySelector('[inc-src="this"]');
                                     // Calling the main includer function
                                     await inc.mainIncluder(href, function (html) {
-                                        // Getting the inc element
-                                        let incElem = inc.d.querySelector('inc[src="this"]') || inc.d.querySelector('[inc-src="this"]');
+                                        // Checking if the element was found
                                         if (incElem) {
                                             // Setting the content
                                             incElem.innerHTML = html;
@@ -191,8 +200,8 @@ const inc = {
                                         } else {
                                             console.error(`Error: <inc src="this"></inc> not found, please check define it.`);
                                         }
-
                                     });
+                                    return incElem;
                                 }
                             });
 
@@ -230,9 +239,15 @@ const inc = {
                     // Preventing the default action
                     ev.preventDefault();
                     // Calling the action that will be fired
-                    await v.action(href, ev.target.getAttribute('pTitle') || href);
+                    let container = await v.action(href, ev.target.getAttribute('pTitle') || href);
                     // Setting the page title 
                     inc.d.title = ev.target.getAttribute('pTitle') || href;
+
+                    // Checking if the added function is not defined
+                    if(inc.added != null)
+                        // Calling the added function
+                        inc.addedEvent(container);
+                    
                     // Geeting the main inc
                     let _inc_ = inc.d.querySelector('inc[src="this"]') || inc.d.querySelector('[inc-src="this"]');
                     // Checking if it's valid
@@ -274,7 +289,7 @@ const inc = {
                     await inc.include(`${inc.src(elem)}.html`, elem);
 
                 // Calling all the loaded events
-                inc.events.forEach(function (cb) {
+                inc.loadedEvents.forEach(function (cb) {
                     cb(e);
                 });
             });
@@ -311,8 +326,11 @@ const inc = {
         return incs;
     },
 
-    // list of events to be fired up
-    events: [],
+    // list of loaded events to be fired up
+    loadedEvents: [],
+
+    // list of loaded events to be fired up
+    addedEvent: null,
 
     // Model Properties handler
     modelHandler: {
