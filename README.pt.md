@@ -1,8 +1,8 @@
-<p align="center" style="height:120px">
+<p style="text-align:center; height:120px">
     <img height="120px" src="assets/ico/main_ico.png" />
 <p>
 
-<h2 align="center"> includer.js </h2>
+<h2 style="text-align:center;" > includer.js </h2>
 
 <hr>
 
@@ -128,12 +128,12 @@
 <br>
 <br>
 
-<p align="center" style="font-size:11pt; margin:0;"> 
+<p style="text-align:center; font-size:11pt; margin:0;"> 
     Thanks a lot for visiting includer.js repo 🙂, I hope you enjoyed!!! 👌<br/>
-    <h4 align="center">Salute 😃</h4> 
+    <h4 style="text-align:center;">Salute 😃</h4> 
 </p>
 <br/>
 
-<p align="center" style="font-size:11pt; margin:0;"> 
+<p style="text-align:center; font-size:11pt; margin:0;"> 
     © 2019, Afonso Matumona Elias 
 </p>
