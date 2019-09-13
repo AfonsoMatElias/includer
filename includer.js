@@ -241,7 +241,8 @@ const inc = {
                     // Calling the action that will be fired
                     let container = await v.action(href, ev.target.getAttribute('pTitle') || href);
                     // Setting the page title 
-                    inc.d.title = ev.target.getAttribute('pTitle') || href;
+                    let title = ev.target.getAttribute('pTitle');
+                    if(title) inc.d.title = title;
 
                     // Checking if the added function is not defined
                     if(inc.added != null)

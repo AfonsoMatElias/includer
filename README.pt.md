@@ -83,7 +83,7 @@
 <p style="text-align: justify">
     Usando o includer-render, também temos a possibilidade de mudar de páginas sem que 
     recarregue, por padrão todas todas as mudanças são feitas com recarregamento da página
-    para que reconstruí-la, para atingir o efeito de mudar de página sem recarregamento dela deve-se ter em conta as âncoras (tag <b>a</b>), definindo que nelas os atributos: <b>reload e pTitle</b>.
+    para reconstruí-la, para atingir o efeito de mudar de página sem recarregamento dela deve-se ter em consideração as âncoras (tag <b>a</b>), definindo que nelas os atributos: <b>reload e pTitle</b>.
     <ul>
         <li><b>reload</b>, ele controla o evento de <b>click</b> do elemento, fazendo que a página que será chamada seja injetada no elemento com a tag <b>inc</b> e o atributo <b>src</b> ou no elemento com o atributo <b>inc-src</b>. </li>
     </ul> 
@@ -95,14 +95,14 @@
 ``` HTML
     <script src="includer.js" title="Main Page"></script>
     <!-- O que o includer entende quando estes attributos são definidos:
-    * reload - recarregue somente o conteudo principal.
+    * reload - recarregue somente o conteúdo principal.
     * pTitle - depois de recarregares dá este titulo. -->
     <label> You are in Index Page <a href="home.html" reload pTitle="Home Page">Click Here</a></label>
 ```
 
 <p style="text-align: justify">
     Está funcionalidade vem acompanhada com a função <b>inc.added(function(e){ ... })</b>, que é disparado sempre que a nova página é injetada, e a mesma é passada como argumento da função.<br>
-    Obs: Deve ser usado no interior da função principal <b>inc.loaded(function(e){ ... })</b>
+    Obs ☝: Deve ser usado no interior da função principal <b>inc.loaded(function(e){ ... })</b>.
 </p>
 
 <p style="text-align: justify">
@@ -121,7 +121,7 @@
 ```
 
 <h3 style="text-align: justify">
-    😀 Os includes podem ser adicionados dinâmicamente, por tanto é ideal para construir aplicações do tipo <b>SPA</b> (Single Page Application) 😎.
+    😀 Os includes podem ser adicionados dinâmicamente com javascript, por tanto é ideal para construir aplicações do tipo <b>SPA</b> (Single Page Application) 😎.
 </h3>
 
 <hr>

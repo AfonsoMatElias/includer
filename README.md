@@ -4,6 +4,9 @@
 
 <h2 align="center"> includer.js </h2>
 
+<hr>
+
+
 <p style="text-align: justify">
     Includer.js is a javascript tool🔨 to assist in the creation of websites or web applications, it makes it possible to include HTML📃 parts, such as: <b>Header, Footer, Modals, etc</b>, or even create a <b>MasterPage</b>, and on the others pages simply define what should be rendered. There are two ways to use includer.js, as stated in the text above, <b>1st</b> simply using inc, or <b>2nd</b> using the rendering inc tag.
 
@@ -76,6 +79,52 @@
 <h3 style="text-align: justify">
     Structuring Order is very important🤞, because of the browser's code reading order!
 </h3>
+
+<p style="text-align: justify">
+    Using includer-render, we also have the ability to change pages without reloading, by default all changes are made with page reloading to rebuild it, to achieve the effect of changing pages without reloading it must have consider the anchors (<b>a</b> tag), defining that in them the attributes: <b>reload and pTitle</b>.
+    <ul>
+        <li><b>reload</b>, it controls the element's <b>click</b> event, causing the page to be called to be injected into the element with the inc tag and the <b>src</b> attribute or the element with the <b>inc-src</b> attribute.</li>
+    </ul> 
+    <ul>
+        <li><b>pTitle</b>, allows you to set the page title (<b>title</b> tag) text after the new page is injected to the value that is set to it.</li>
+    </ul> 
+</p>
+
+``` HTML
+    <script src="includer.js" title="Main Page"></script>
+    <!-- What does includer understand when these attributes are defined:
+        * reload - reload only main content.
+        * pTitle - after reloading gives this title. -->
+    <label> You are in Index Page <a href="home.html" reload pTitle="Home Page">Click Here</a></label>
+```
+
+<p style="text-align: justify">
+    This functionality comes with the <b>inc.added(function(e){ ... })</b>, which fires whenever the new page is injected, and is passed as the function argument.<br>
+    Note ☝: Must be used inside the main function <b>inc.loaded(function(e){ ... })</b>.
+</p>
+
+<p style="text-align: justify">
+    If we don't want to use the includer tag (<b>inc</b>), we can also use the standard HTML tags and still be able to include the desired sections, so we have to set the <b>inc-src</b> attribute on the element where we want the content to be injected.
+</p>
+
+``` HTML
+    <!-- Including the header -->
+    <header class="myHeader" inc-src="inc/header"></header>
+    
+    <!-- Including the main content -->
+    <main class="myMain" inc-src="inc/main"></main>
+
+    <!-- Including the footer -->
+    <footer class="myFooter" inc-src="inc/footer"></footer>
+```
+
+<h3 style="text-align: justify">
+    😀 Includes can be added dynamically with javascript, so it is ideal for building SPA applications (Single Page Application) 😎.
+</h3>
+
+<hr>
+<br>
+<br>
 
 <p align="center" style="font-size:11pt; margin:0;"> 
     Thanks a lot for visiting includer.js repo 🙂, I hope you enjoyed!!! 👌<br/>
