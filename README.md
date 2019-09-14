@@ -1,11 +1,10 @@
-<p style="text-align:center; height:120px">
+<p align="center" style="text-align:center;height:120px">
     <img height="120px" src="assets/ico/main_ico.png" />
 <p>
 
-<h2 style="text-align:center;"> includer.js </h2>
+<h2 align="center" style="text-align:center;"> includer.js </h2>
 
 <hr>
-
 
 <p style="text-align: justify">
     Includer.js is a javascript tool🔨 to assist in the creation of websites or web applications, it makes it possible to include HTML📃 parts, such as: <b>Header, Footer, Modals, etc</b>, or even create a <b>MasterPage</b>, and on the others pages simply define what should be rendered. There are two ways to use includer.js, as stated in the text above, <b>1st</b> simply using inc, or <b>2nd</b> using the rendering inc tag.
@@ -126,12 +125,12 @@
 <br>
 <br>
 
-<p style="text-align:center;font-size:11pt; margin:0;"> 
+<p align="center" style="text-align:center;font-size:11pt; margin:0;"> 
     Thanks a lot for visiting includer.js repo 🙂, I hope you enjoyed!!! 👌<br/>
-    <h4 style="text-align:center;">Salute 😃</h4> 
+    <h4 align="center" style="text-align:center;">Salute 😃</h4> 
 </p>
 <br/>
 
-<p style="text-align:center;font-size:11pt; margin:0;"> 
+<p align="center" style="text-align:center;font-size:11pt; margin:0;"> 
     © 2019, Afonso Matumona Elias | <b>Translated by Google Translator</b>
 </p>
