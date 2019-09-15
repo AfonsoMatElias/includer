@@ -68,7 +68,7 @@ const inc = {
             elem.innerHTML += result;
             // Looping the scripts
             for (let s of elem.querySelectorAll('script'))
-                // Evaluating them
+                // Evalueting them
                 eval(s.innerHTML);
         });
     },
@@ -113,7 +113,7 @@ const inc = {
                 }
                 // Looping the scripts
                 for (let s of elem.querySelectorAll('script')) {
-                    // Evaluating them
+                    // Evalueting them
                     eval(s.innerHTML);
                 }
                 // Calling all the loaded events
@@ -255,7 +255,7 @@ const inc = {
                     if (_inc_)
                         // Looping the scripts
                         for (let s of _inc_.querySelectorAll('script'))
-                            // Evaluating the scripts
+                            // Evalueting the scripts
                             eval(s.innerHTML);
                 }
             });
@@ -339,7 +339,7 @@ const inc = {
          * Function to check if it has some variables to be replaced
          * @param {string} v - the content that needs to be checked 
          */
-        i_checker: function (v) {
+        i_checker(v) {
             // Checking if some string combine the regex
             return v ? v.match(/-i-[^-]*-/g) : [];
         },
@@ -348,7 +348,7 @@ const inc = {
          * @param {string} content - the content that needs to be placed
          * @param {Object} model - the model that the value will be got
          */
-        i_setter: function (content, model) {
+        i_setter(content, model) {
             // Getting the combinations
             let combinations = inc.i_checker(content);
             // Looping them
